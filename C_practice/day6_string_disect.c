@@ -10,27 +10,26 @@ int main() {
 
     /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
     int number_of_cases;
+    int i=0,j=0, k = 0;
     scanf("%d", &number_of_cases);
-    int i=0,j=0, size = 0;
-    char * str[number_of_cases];
+    while ((j=getchar()) != EOF && j != '\n');//added
+    
     assert(number_of_cases >= 1);
     assert(number_of_cases <= 10);
+    char str[number_of_cases][10];//declare 10 uninitialised strings
     for (i = 0; i < number_of_cases; i++)
     {
-        scanf("%ms", &str[i]);
-        if(strlen(str[i]) > LENGTH_OF_S)
-        {
-            number_of_cases = i;
-            break;
-        }
+        fgets(str[i],10,stdin);
+        str[i][strlen(str[i])-1] = '\0';
     }
     
-    char * c = str[0];
+    char * c;
     char onechar;
     char even[EVEN_LEN], odd[EVEN_LEN];
+    even[0]= '\0';odd[0] = '\0';//clear the first buffer
     for (i = 0; i < number_of_cases; i++)
     {
-        c = str[i];
+        c = (char *)&str[i][0];
         j=0;
         while (*c != '\0')
         {
@@ -42,6 +41,8 @@ int main() {
             ++c;
             j++;
         }
+        even[j]='\0';
+        odd[j]='\0';
         printf("%s %s\n",&even[0], &odd[0]);
         even[0]= '\0';//empty the string, for strncat()
         odd[0] = '\0'; //put null char at the start
@@ -50,11 +51,10 @@ int main() {
 }
 
 /*Sample Input
-
 2
 Hacker
 Rank
-Sample Output
 
+Sample Output
 Hce akr
 Rn ak */

@@ -69,3 +69,19 @@ int main(){
     myTree.levelOrder(root);
     return 0;
 }
+/*          3
+           / \
+          2   5
+         /   / \
+        1   4   7
+
+Input: 
+6
+3
+5
+4
+7
+2
+1
+
+Output print: 3 2 5 1 4 7 */
