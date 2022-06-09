@@ -245,4 +245,8 @@ The hourglass with the maximum sum (19) is:
 
 2 4 4
   2
-1 2 4 */
+1 2 4 
+
+*(*(matrix + 0) + 1) =>    Points to matrix[0][1]
+*(*(matrix + 2) + 2) =>    Points to matrix[2][2]
+*/

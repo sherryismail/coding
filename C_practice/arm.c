@@ -132,7 +132,7 @@ void overlay_mouse_pointer(uint16_t* frame_buffer,
   y = (uint16_t) y_coordinate;
   //check mouse overhang condition
   
-  back = (frame_buffer + x + (y * 640));
+  back = (frame_buffer + x*640 + (y));//? or x,y*640
   for (i=0; i < 2; i++)
   {
     for (j=0; j < 2; j++)
