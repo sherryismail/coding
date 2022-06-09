@@ -13,6 +13,18 @@ int solution(int n) {
         n /= 2;
         l++;
     }
+    /*
+for (c = 31; c >= 0; c--)
+    {
+        k = n >> c;
+        if (k & 1)
+            printf("1");
+        else
+            printf("0");
+        }
+    } 
+
+    */
     for (p = 1; p < (1 + l)/2; ++p) {
         int ok = 1;
         int i;
@@ -33,6 +45,6 @@ int solution(int n) {
 int main() {
   
   /* Put any tests here. */
-  printf("%d", solution(955));
+  printf("%d", solution(1651));//955
   return 0;
 }

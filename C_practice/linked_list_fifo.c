@@ -7,7 +7,7 @@ struct Node {
 struct Node * insert(struct Node *head, int data)
 {
     struct Node ** this = &head;
-    struct Node * new = malloc (sizeof(struct Node));
+    struct Node * new = (struct Node *) malloc (sizeof(struct Node));
     printf("head=%p,this=%p\t",head,this);
     //the advantage of **Node is that you need nto check the first NULL condition
     while(*this != NULL)
@@ -39,17 +39,31 @@ struct Node * removed(struct Node * head, int data)
 {
     struct Node ** this = &head;
     struct Node * prev = head;
+    struct Node * temp;//free(head) will not work. 
     while((*this)!= NULL)
-    {
+    {           
         if ( (*this)->data == data)
         {
-            prev->next = (*this)->next;
-            free((struct Node *)(this));
+            if(*this == head)
+            {
+                temp = head;
+                head = head->next;
+               free((struct Node *)temp);
+            }
+            else
+            {
+                
+                temp = *this;
+                free((struct Node *)temp);//not working
+                prev->next = (*this)->next;
+            }
             printf("Found it\n");
+            //there may be multiple repeated 'data'
         }
         else
         {
             prev = *this;
+            
         }
         this = &((*this)->next);
     }
@@ -73,3 +87,4 @@ int main()
     printf(" head=%p",head);//head is intact
     return 0;
 }
+
