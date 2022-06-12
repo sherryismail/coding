@@ -14,7 +14,7 @@ struct Node * insert(struct Node *head, int data)
     {
         this = &((*this)->next);
     }
-    printf("head=%p,this=%p, new=%p\n",head,this,new);
+    //printf("head=%p,this=%p, new=%p\n",head,this,new);
     //at the end of while(), *this always ends up pointing to 'next' field of last element,hence NULL
     //put location of newest element at this location --> *this
     *this = new; //this = &new; WON'T WORK
@@ -69,17 +69,44 @@ struct Node * removed(struct Node * head, int data)
     }
     return head;
 }
+void reverse (struct Node ** head)
+{
+    struct Node * current;
+    struct Node * prev, *temp;
+    current = *head;
+    prev = NULL;
+
+    while(current != NULL)
+    {
+        //store forward node
+        temp = current->next;
+        //reverse current pointer, overwrite
+        current->next = prev;
+        //move one node ahead for prev and cuurent
+        prev = current;
+        current = temp;
+    }
+    *head = prev;//edit the head only in the end
+    //while-loop exited so current=NULL. Do not assign it to *head
+
+}
 int main()
 {
     struct Node * head = NULL;
 
     int T,data;
+    printf("Enter number of nodes: ");
     scanf("%d",&T);
+    printf("Enter values of nodes: ");
     while(T-->0){
         scanf("%d",&data);
         head=insert(head,data);
     } 
     display(head); 
+    printf("Reversing array:\n");
+    reverse(&head);
+    display(head);
+
     printf("\nEnter the value to remove: ");
     scanf("%d",&data);
     head = removed(head,data);
