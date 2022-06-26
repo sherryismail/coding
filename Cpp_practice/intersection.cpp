@@ -22,8 +22,8 @@ vector<int> intersection(vector<int> arr1, vector<int> arr2, int size1, int size
         if(freq.find(i) != freq.end())
         {
             if(freq[i] > 0){//if value already exists and this was set to 1
-                r.push_back(i);size2= freq.get(arr2[i]);
-                freq[i]--;
+                r.push_back(i);
+                freq[i]--;//or freq=0 to count only once
             }
         }//else, for arr2[10]=20 did not exist in arr1, so freq.end reaches
     }
