@@ -44,7 +44,40 @@ int detectLoop(Node *head)
         {
             return loopSize(head);
         }
+        /*time comeplxity: O(N)
+        if no cycle, then fast pointer takes M/2 times to reach the end. if N=size
+        if cycles=yes, fast pointer needs M times to catch up with the slow pointer, M=size of loop
+        M<=N, so O(M+N) ===> O(N)
+        */
     }
+}
+Node * detect_start_of_loop(Node * head)
+{
+     struct Node * slow = head, *fast = head;
+    struct Node * result = NULL;
+    int i=0,j=0;
+    while(slow && fast && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+        if(slow == fast)
+        {
+            result = slow;//stop at this
+            break;//Floyds algo will stop it at a special point
+        }
+    }
+   i=0;
+    while(head != result && result)//2nd check if result==NULL for single linked list Node
+    {
+        result = result->next;
+        head = head->next;
+        i++;
+    }
+    printf("%d is the start of the loop",i);
+    //if any NULL object that means cycle does not exist
+    return result;
+    //test case [1]
+    //test case [3,2,0,-4, 2, 0, -4]
 }
 
 void main()
@@ -61,12 +94,15 @@ void main()
     push(&head, 4);
     push(&head, 15);
     push(&head, 10);
+    push(&head, 8);
  
     /* Create a loop for testing */
-    head->next->next->next->next = head;
+    struct Node * turn_back = head->next;
+    head->next->next->next->next->next = head->next;
  
     if (detectLoop(head))
         printf("Loop found");
     else
         printf("No Loop");
+    detect_start_of_loop(head);
 }
