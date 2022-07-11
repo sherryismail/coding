@@ -1,5 +1,4 @@
 #include <iostream>
-#include <bits/stdc++.h>
 #include <queue>
 #include <stack>
 using namespace std;
@@ -31,7 +30,7 @@ public:
 int main() {
     // read the string s.
     string s;
-    getline(cin, s);
+    cin>> s;
     
   	// create the Solution class object p.
     Solution obj;

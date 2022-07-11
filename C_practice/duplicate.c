@@ -46,7 +46,7 @@ Output: -1
 int findUniqueCharacter(char * s)
 {
    
-    char alphabet[ALPHABET] = 0;
+    char alphabet[ALPHABET];
     char * start = &alphabet[0];
     memset(start, 0, sizeof(char) * ALPHABET);
     for(int i=0; i <strlen(s);i++)
@@ -62,5 +62,7 @@ int findUniqueCharacter(char * s)
 }
 void main(void)
 {
+    char str[] = "leetcode";
+    printf("%c is the first repeated char",  'a' +findUniqueCharacter(str));
     
 }

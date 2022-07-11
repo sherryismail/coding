@@ -31,7 +31,7 @@ int findunique(int *arr, int N)
         integers[arr[i]]++;
     }
     j = 0;
-    for (i = k; i < 10; i++)
+    for (i = 0; i < 10; i++)//why was it i=k
     {
         if (integers[i] >= 1)
         {

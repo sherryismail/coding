@@ -21,6 +21,7 @@ public:
     map<int,int> map;
     //unordered_set<int> set;
 public:
+//method 1
     bool isHappy(int n)
     {
         while(n != 1){//if num=1, return true
@@ -39,6 +40,7 @@ public:
         return n==1;
     }
 };
+//method 2 - cycle detect
 class cycle_detect {
 public:
     int next(int n)

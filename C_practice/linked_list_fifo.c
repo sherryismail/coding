@@ -50,13 +50,14 @@ struct Node *removed(struct Node *head, int data)
                 temp = head;
                 head = head->next;
                 free((struct Node *)temp);
+                *this = head;
             }
             else
             {
 
                 temp = *this;
-                free((struct Node *)temp); // not working
                 prev->next = (*this)->next;
+                free((struct Node *)temp); // not working
             }
             printf("Found it\n");
             // there may be multiple repeated 'data'
@@ -90,20 +91,41 @@ void reverse(struct Node **head)
     // while-loop exited so current=NULL. Do not assign it to *head
 }
 // recursive iterative reverse linked list
-{//DONT UNDERSTAND
-    if (head == NULL)
-        return NULL;
-    else if (head->next == NULL)
-        return NULL;
-    else
-    {
-        struct Node *current = head->next;
-        head->next = NULL;//disconnect LHS from RHS
-        struct Node *next = reverse(current);
-        new->next = head;
-    }
+//https://joequery.me/notes/reverse-linked-list-recursion/
+struct Node * reverse_recursive(struct Node *head)
+{
+    if (head == NULL || head->next == NULL)//end of the original LL
+            return head;
+ 
+        /* reverse the rest list and put
+          the first element at the end */
+        struct Node* rest = reverse_recursive(head->next);//returns a head of partially reversed LL
+        //head's next node is now at the end of the reversed list, starting from 'rest'
+       //the next node of head's current next node needs to be updated to point to the caller head
+       //|rest|->....->|B| <-> |A| B and A pointing to each other
+        head->next->next = head;
+ 
+        /* this is now tail of the list */
+        head->next = NULL;
+ 
+        /* fix the head pointer */
+        return rest;
+}
+// Input 1->2->3->4
+//Output: 2->1->4->3
+//clarifyin questions: what to do when number of nodes are odd, not even
+struct Node * swap_pairs(struct Node * head)
+{
+    if(head == NULL || head->next == NULL)
+    return head;
+    struct Node * first = head;
+    struct Node * second = head->next;
+    struct Node * rest = swap_pairs(second->next);//assume it returns partially correct answer
+    //it returns the rest of the chain that first should connect with 
+    second->next = first;
+    first->next = rest;
+    return second;
 
-    return next;
 }
 // Given the head of a linked list, remove the nth node from the end of the list and return its head.
 struct Node *removeNthFromEnd(struct Node *head, int n)
@@ -147,10 +169,19 @@ int main()
         head = insert(head, data);
     }
     display(head);
-    printf("Reversing array:\n");
+    printf("\nReversing array:\n");
     reverse(&head);
     display(head);
+    printf("\nReversing array recursively:\n");
+    struct Node * this = reverse_recursive(head);
+    display(this);
 
+    head = this;
+    printf("\nAfter swapping pairs: ");
+    this = swap_pairs(head);
+    display(this);
+
+    head = this;
     printf("\nEnter the value to remove: ");
     scanf("%d", &data);
     head = removed(head, data);

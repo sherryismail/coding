@@ -22,7 +22,7 @@ class hashmap{
     public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
         vector<vector<int>> output;
-        sort(nums.begin(), nums.end());
+        //sort(nums.begin(), nums.end());
         //T= a+b+c+d
         for (int i=0; i < nums.size(); i++)
         {
@@ -66,7 +66,7 @@ int main(void)
 {
     vector<int> input = {-2,-1,0,0,1,2};//sorted array
     hashmap s;
-    int target = 0;
+    int target = 1;
     vector<vector<int>> output = s.fourSum(input, target);
 
     cout<< "Number of possibilities to have "<<target << " is " <<output.size()<< endl;;

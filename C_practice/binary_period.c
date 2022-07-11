@@ -25,13 +25,15 @@ for (c = 31; c >= 0; c--)
     } 
 
     */
+
+   //start from centre
     for (p = 1; p < (1 + l)/2; ++p) {
         int ok = 1;
         int i;
-        for (i = 0; i < l - p; ++i) {
+        for (i = 0; i < l - p; ++i) {//start from offet from end
              //printf("inner loop d[i]=%d, d[i+p]=%d\n", d[i],d[i+p]);
             if (d[i] != d[i + p]) {
-                ok = 0;
+                ok = 0;//not periodic
                 break;
             }
         }

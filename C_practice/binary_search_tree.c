@@ -79,8 +79,8 @@ bool checkBST(struct node* root) {
 int getHeight(struct node* root) {
     if (!root->left && !root->right)
         return 0;//leaf node
-        if(root->left)
-        getHeight(root->left);
+        // if(root->left)
+        // getHeight(root->left);
     int left=0, right=0;
     if(root->left)
         right = getHeight(root->left);

@@ -3,10 +3,10 @@ My own coding practice
 
 #To do
 hashmaps. Hashset in C done
-Binary search
+Binary search Hacker Rank done. DO more from Leetcode
 Self balancing binary search tree
 Remove repeated elements in array without sorting them
-
+Two-pointer problems
 Data structures you should know:
 Arrays, Linked Lists, Stacks, Queues, Trees, Graphs, Heaps, Hash sets, Hash maps
 

@@ -2,10 +2,10 @@
 #include <string.h>
 int main ()
 {
-    char str[6];
+    char str[31];//if INT_MAX is 2^31 = 2147...
     scanf("%s", str);
     int temp = 0;
-    for (int i = 0; i < sizeof(str); i++) {
+    for (int i = 0; i < strlen(str); i++) {
         //only works if 6-digit number, not for 2/3/4 digits
         // Since ASCII value of character from '0'
         // to '9' are contiguous. So if we subtract
