@@ -1,6 +1,10 @@
+#include <vector>
+#include <iostream>
+using namespace std;
+
 //mnethod 1
 int find_low_index(vector<int>& arr, int key) {
-  //TODO: Write - Your - Code
+
   int low = 0;
   int high = arr.size() -1;
   int mid = high/2;
@@ -18,7 +22,7 @@ int find_low_index(vector<int>& arr, int key) {
 }
 //method 2
 int find_high_index(vector<int>& arr, int key) {
-  //TODO: Write - Your - Code
+
     int high=-1, found =0;
   for(int i=0; i < arr.size() -1; i++)
   {

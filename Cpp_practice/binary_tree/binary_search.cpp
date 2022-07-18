@@ -120,26 +120,49 @@ void decode_huff1(node * root, string s) {
         i++;
     }
 }
+//inorder traversal of binary tree
+void print_tree(node * root)
+{
+    if(root == nullptr)
+    return;
+    if(root->left)
+        print_tree(root->left);
+    cout << root->freq << " ";
+    if(root->right)
+        print_tree(root->right);
+}
 int main()
 {
 
     string s;
     std::cin >> s;
-
     node *tree = huffman_hidden(s);
     string code = "";
     map<char, string> mp;
 
     print_codes_hidden(tree, code, mp);
-
     string coded;
 
     for (int i = 0; i < s.length(); i++)
-    {
         coded += mp[s[i]];
-    }
-
-    decode_huff(tree, coded);
+    decode_huff1(tree, coded);
+    
+    cout << endl<< "The In-order traversal is ";
+    node * root = new node;
+    root->freq = 1;
+    root->left =  new node;
+    root->left->freq = 2;
+    root->right = new node;
+    root->right->freq = 3;
+    root->left->left = new node;
+    root->left->left->freq = 4;
+    root->left->right = new node;
+    root->left->right->freq = 5;
+    root->right->left = new node;
+    root->right->left->freq = 6;
+    root->right->right = new node;
+    root->right->right->freq = 7;
+    print_tree(root);
 
     return 0;
 }
