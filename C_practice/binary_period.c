@@ -3,7 +3,12 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+// 7 is the period of abracadabracadabra
+//1651 has the binary representation of 110011100111 = binary period is 5
+// 7 is the period of pepsicopepsicopep
+//4 is the binary period of 955
 
+//convert the number into its 32-bit binary representation
 int solution(int n) {
     int d[30];
     int l = 0;
@@ -47,6 +52,6 @@ for (c = 31; c >= 0; c--)
 int main() {
   
   /* Put any tests here. */
-  printf("%d", solution(1651));//955
+  printf("%d", solution(955));//955
   return 0;
 }
