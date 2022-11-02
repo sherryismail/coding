@@ -5,6 +5,7 @@ using namespace std;
 Array is sorted in 3 swaps.
 First Element: 1
 Last Element: 3
+Time complexity: O(n^2)
 */
 string ltrim(const string &);
 string rtrim(const string &);
