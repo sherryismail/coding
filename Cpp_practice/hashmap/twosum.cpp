@@ -61,27 +61,50 @@ public:
                 }
             }
         }
-        vector<int>::iterator it;
-        for(it = pair.begin(); it != pair.end(); it++)
-        {
-            cout << " "<< *it;
-        }
         return pair;
         //time complexity N^2
+    }
+    vector<int> twopointers(vector<int>& nums, int target) {
+        int j= 0;
+        int k= nums.size()-1;
+        vector<int> pair;
+        int diff;
+        while ( j < k)
+        {
+            diff = target - nums[j] - nums[k];
+            if(diff == 0)
+            {
+                pair.push_back(j);
+                pair.push_back(k);
+                break;
+            }else if (diff <0)
+                k--;
+            else if (diff >0)
+                j++;
+        }
+        return pair;
     }
 };
 int main(void)
 {
-    vector<int> input = {2,7,11,15};
+    vector<int> input = {2,7,11,-15};
     Solution s;
-    vector<int> output = s.twoSum(input,26);
+    int target = -4;
+    vector<int> output = s.twoSum(input,target);
     vector<int>::iterator it;
+    cout << "hashmap->";
         for(it = output.begin(); it != output.end(); it++)
         {
             cout << " "<< *it;
         }
-        cout <<endl;
-    output = s.bruteForce(input,26);
+        cout <<endl<<"brute force->";
+    output = s.bruteForce(input,target);
+        for(it = output.begin(); it != output.end(); it++)
+        {
+            cout << " "<< *it;
+        }
+    cout <<endl<<"two pointers->";
+    output = s.twopointers(input,target);
         for(it = output.begin(); it != output.end(); it++)
         {
             cout << " "<< *it;

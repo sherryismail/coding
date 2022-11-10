@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <unordered_set>
+#include <threesum.cpp>
 using namespace std;
 /* https://fizzbuzzed.com/top-interview-questions-1/
 GGiven an array nums of n integers, return an array of all the unique quadruplets 
@@ -18,9 +19,10 @@ Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
 Input: nums = [2,2,2,2,2], target = 8
 Output: [[2,2,2,2]]
 */
-class hashmap{
+class fourSum{
+    //g++ .\hashmap\foursum.cpp -I .\hashmap\ -DUSED_AS_LIB
     public:
-    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+    vector<vector<int>> twopointer(vector<int>& nums, int target) {
         vector<vector<int>> output;
         //sort(nums.begin(), nums.end());
         //T= a+b+c+d
@@ -59,17 +61,44 @@ class hashmap{
             }
         }
         return output;
+    }//Time complexity : O(N^2 + N) = O(N^2)
+    vector<vector<int>> reuse_threesum(vector<int>& nums, int target)
+    {
+        threeSum s3;
+        vector<vector<int>> output;
+        for (int i=0; i < nums.size(); i++)
+        {
+            //skip the duplication
+            if (i > 0 && nums[i - 1] == nums[i]) 
+                continue;
+            vector<int> subset(nums.begin()+i+1, nums.end());
+            vector<vector<int>> subOutput = s3.twopointers(nums,target - nums[i]);
+            for(int j = 0; j < subOutput.size(); j++) {
+                subOutput[j].insert(subOutput[j].begin(), nums[i]);
+                output.push_back(subOutput[j]);
+            } //TODO: bug here
+        }
+
+        return output;
     }
 };
 
 int main(void)
 {
     vector<int> input = {-2,-1,0,0,1,2};//sorted array
-    hashmap s;
+    fourSum s;
     int target = 1;
-    vector<vector<int>> output = s.fourSum(input, target);
-
-    cout<< "Number of possibilities to have "<<target << " is " <<output.size()<< endl;;
+    vector<vector<int>> output = s.twopointer(input, target);
+    cout<< "Two pointers: Number of possibilities to have "<<target << " is " <<output.size()<< endl;;
+    //print a vector of vectors vector<vector<>>
+    for (auto &i:output)
+    {
+        for(auto const &j:i)
+            cout << " " << j;
+        cout <<endl;
+    }
+    output = s.reuse_threesum(input, target);
+    cout<< "Recursive: Number of possibilities to have "<<target << " is " <<output.size()<< endl;;
     //print a vector of vectors vector<vector<>>
     for (auto &i:output)
     {

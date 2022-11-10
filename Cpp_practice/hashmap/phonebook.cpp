@@ -18,7 +18,7 @@ void add_to_phonebook(std::map<string,long> * phonebook, string name, long numbe
          // Access the Key from iterator
         string key = it->first;
         // Access the Value from iterator
-        int value = it->second;
+        long value = it->second;
     }
     else 
     {
