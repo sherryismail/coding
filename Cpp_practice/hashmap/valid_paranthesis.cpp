@@ -49,3 +49,14 @@ public:
         else return false;
     }
 };
+
+int main()
+{
+    Solution sol;
+    string input = "()[{}{}]";
+    bool result = sol.method1(input);
+    if(result == true)
+        cout << "Valid paranthesis pairs";
+        else
+        cout << "NOT valid paranthesis pairs";
+}

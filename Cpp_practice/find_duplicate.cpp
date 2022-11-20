@@ -15,8 +15,13 @@ void printRepeating(int arr[], int n)
     for (int i = 0; i < n; i++) 
     {
         int index = arr[i] % n;
-        arr[index] += n;
+        arr[index] += n;//go to index and increase value
     }
+    /* clarifying Question 1: is the value of all elements of the array 
+     in range 0 < auto &i < size(array)
+     clarifying Question 2: can I use data structure ? No
+     clarifying Question 3: should the check be done in place? yes
+    */
     for (int i = 0; i < n; i++) 
         cout << arr[i] << " ";
     cout << endl;

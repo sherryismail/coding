@@ -2,6 +2,7 @@
 #include <map>
 #include <math.h>
 #include <unordered_map>
+#include <unordered_set>
 using namespace std;
 /* A happy number is the one with its digits e.g. 19= 1^2 + 9^2 = 82
 then 8^2 + 2^2 = 68...
@@ -16,17 +17,20 @@ if struct Node {
     struct Node * next;
 }
 */
-class hash_map {//similar to my algo, with its use of hash_map
+class dictionary {//similar to my algo, with its use of hash_map
+    
 public:
-    map<int,int> map;
-    //unordered_set<int> set;
-public:
+    map<int,int> hashmap;
 //method 1
     bool isHappy(int n)
     {
-        while(n != 1){//if num=1, return true
-            if(map[n] == 0)//set.find(n) == set.end()
-                map[n]++;
+        // unordered_set<int> ust;
+        
+        while (n != 1){//if num=1, return true
+            if(hashmap[n] == 0)//set.find(n) == set.end()
+                hashmap[n]++;
+            // if (ust.find(n) != ust.end())
+            //     ust.insert(n);
             else//num already happened
                 return false;
 
@@ -112,7 +116,7 @@ bool isHappy(int n)
 int main (void){
     Sherry_algo s;
     cycle_detect leetcode;
-    hash_map hmap;
+    dictionary hmap;
     bool state;
     int num;
     while(num <= 1000){

@@ -21,10 +21,10 @@ ReturnType aggregateByKey_hashmap(vector<Type>& keys) {
 #include <iostream>
 #include <unordered_map>
 using namespace std;
-class hashmap {
+class firstUniqChar { //hashmap
 public:
-    /*  METHOD 1 - THIS IS ALSO AN ACCEPTED SOLUTION
-    int firstUniqChar(string s) {
+    /*  METHOD 1 - THIS IS ALSO AN ACCEPTED SOLUTION */
+    int firstUniqCharMapped(string s) {
         unordered_map<char,pair<int,int>> alphabet;//int is >1 if repeated
         // vector<pair<int,int>> umap(26);  can also be used
         int index=s.length();
@@ -47,9 +47,10 @@ public:
     return index< s.length() ? index: -1;
         
     }
-    */
+    
    //METHOD 2
-    int firstUniqChar(string s) {
+   //clarifying question: Is it first letter in a,b,c alphabet or first occurance of the uniqueChar
+    int firstUniqCharDetected(string s) {
         unordered_map<char, int> alphabet;
         for (char& c : s) {
             alphabet[c]++;
@@ -59,4 +60,21 @@ public:
         }
         return -1;
     }
+
 };
+int main (void)
+{
+    firstUniqChar sol;
+    string input = "hhallaoorld";
+    cout << "First Unique char in hashmap<char,int> \""<< input<<"\" is at index: "<< sol.firstUniqCharDetected(input)<<endl;
+    cout << "First Unique char in map<char,<int,int>> index: "<< sol.firstUniqCharMapped(input)<<endl;
+
+    input = "world";
+    cout << "First Unique char in hashmap<char,int> \""<< input<<"\" is at index: "<< sol.firstUniqCharDetected(input)<<endl;
+    cout << "First Unique char in by map<char,<int,int>> index: "<< sol.firstUniqCharMapped(input)<<endl;
+    
+    input = "hannah";
+    cout << "First Unique char in hashmap<char,int> \""<< input<<"\" is at index: "<< sol.firstUniqCharDetected(input)<<endl;
+    cout << "First Unique char in by map<char,<int,int>> index: "<< sol.firstUniqCharMapped(input)<<endl;
+    return 0;
+}//edge cases 1. space

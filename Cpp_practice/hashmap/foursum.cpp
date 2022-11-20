@@ -72,7 +72,7 @@ class fourSum{
             if (i > 0 && nums[i - 1] == nums[i]) 
                 continue;
             vector<int> subset(nums.begin()+i+1, nums.end());
-            vector<vector<int>> subOutput = s3.twopointers(nums,target - nums[i]);
+            vector<vector<int>> subOutput = s3.twopointers(subset,target - nums[i]);
             for(int j = 0; j < subOutput.size(); j++) {
                 subOutput[j].insert(subOutput[j].begin(), nums[i]);
                 output.push_back(subOutput[j]);
@@ -85,7 +85,7 @@ class fourSum{
 
 int main(void)
 {
-    vector<int> input = {-2,-1,0,0,1,2};//sorted array
+    vector<int> input = {-2,-1,0,0,1,2};//sorted array{-2,-1,0,1,2,3}
     fourSum s;
     int target = 1;
     vector<vector<int>> output = s.twopointer(input, target);
