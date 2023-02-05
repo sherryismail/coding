@@ -3,8 +3,10 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+
+#include "prime_test.hpp"
 using namespace std;
-void is_it_prime(int * input, int T)
+int is_it_prime(int * input, int T)
 {
     int prime = 1;
     for (int i=0; i < T; i++)
@@ -31,6 +33,7 @@ void is_it_prime(int * input, int T)
         else
             cout << "Prime" << endl;
     }
+    return 0;
 }
 
 int main() {
