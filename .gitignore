@@ -54,3 +54,6 @@ Mkfile.old
 dkms.conf
 C_practice/a.exe
 Cpp_practice/a.exe
+
+#google test
+Cpp_practice/unittest_project/build/

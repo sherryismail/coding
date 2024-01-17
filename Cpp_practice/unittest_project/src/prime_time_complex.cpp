@@ -35,16 +35,17 @@ int is_it_prime(int * input, int T)
     }
     return 0;
 }
-
-int main() {
-    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
-    int T,num, i=0;
-    cin >> T;
-    int * input = (int *) malloc (sizeof(int) * T);
-    while(i < T){
-        cin >> input[i];
-        i++;
-    }
-    is_it_prime(input,T);
-    return 0;
-}
+#ifndef GOOGLETEST
+// int main() {
+//     /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+//     int T,num, i=0;
+//     cin >> T;
+//     int * input = (int *) malloc (sizeof(int) * T);
+//     while(i < T){
+//         cin >> input[i];
+//         i++;
+//     }
+//     is_it_prime(input,T);
+//     return 0;
+// }
+#endif
