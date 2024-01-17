@@ -1,29 +1,32 @@
 #include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
+#include <ctype.h>
 #define MAX 50
 int main (void)
 {
-    char show[MAX] = "Hello world \nHello world\n";
+    char show[MAX];// = "Hello world \nHello world\n";
     char c;
-    scanf("%[^\n]s", &show);
-    int i = 0, words = 0, lines = 0;
+    // ^ caret operator is to ignore a particular char
+   scanf("%49[^\n]", show);// %* is suppression char. ignore leading 'e's
+   printf("%s\n", show);
+    short i = 0, chars = 0, words = 0, lines = 0, newword = 0;
     while(show[i] != '\0')
     {  
-        if (show[i] == ' ' || show[i]=='\t')
+        if ((show[i] == ' ' || show[i]=='\t') && newword)
+        {
             words++;
+            newword = 0;
+        }
         else if (show[i] == '\n')
         {
             lines++;
         }
-        else if (show[i] < 32 && show[i] > 122)
-            continue;
-        //if it is \n or ' ', it is still a char
-        else
-            i++;
+        else if (isalnum(show[i])){
+            chars++;
+            newword = 1; //word starts with a valid char
+        }
+        i++; 
     }
-    printf("chars %d, words %d lines %d\n", i, words, lines);
+    printf("chars %3d, words %3d lines %3d\n", chars, words, lines);
 
     return 0;
 }
