@@ -1,16 +1,10 @@
-
-# Build output setup
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/src/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/src/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/src/bin)
+cmake_minimum_required(VERSION 3.16)
 
 #get all of the source files
-set(SRCS *.hpp *.cpp)
+file(GLOB SRCS *.hpp *.cpp) 
+set(LIB_PRIME prime)
 
-add_library(${LIBNAME} SHARED ${SRCS})
-
-# set(BINARY ${CMAKE_PROJECT_NAME})
-# file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.hpp *.cpp)
-# set(SOURCES ${SOURCES})
-# add_executable(${BINARY}_run ${SOURCES}) #The name of the compiled program will be ExampleProject_run,
-# add_library(${BINARY}_lib STATIC ${SOURCES})#to include the code in the unit tests.
+add_library(${LIB_PRIME} STATIC ${SRCS}) # creates *.a (STATIC) or *.so (SHARED) to be used by Googletest
+add_executable(prime_src ${SRCS})
+# Define SOURCES to be a list of all cpp and hpp files
+# file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.hpp *.cpp) # error: multiple defn of main

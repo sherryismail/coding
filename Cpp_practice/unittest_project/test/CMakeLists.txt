@@ -1,50 +1,41 @@
-# Build output setup
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test/bin)
+cmake_minimum_required(VERSION 3.16)
+set(TSTS unittest_prime)
+
+# ################################
+# # Submodule method
+# ################################
+# include(FetchContent)
+# FetchContent_Declare(
+#   googletest
+#   GIT_REPOSITORY https://github.com/google/googletest.git
+#   GIT_TAG        release-1.10.0
+# )
+
+# # For Windows: Prevent overriding the parent project's compiler/linker settings
+# # hook and configure dependencies after googletest submodule is available
+# set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+# set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+# set(BUILD_GTEST ON CACHE BOOL "" FORCE)
+# # FetchContent_MakeAvailable(googletest)
+# ################################
+# # Tests
+# ################################
+# add_executable(${TSTS} test_prime.cpp)
+# target_include_directories(${TSTS} ${LIB1} PUBLIC ${CMAKE_SOURCE_DIR}) # So files can discover library headers
+# target_link_libraries(${TSTS} PUBLIC ${LIB1} gtest gtest_main pthread) # link executable to googletest CPP src code
+# add_test(NAME prime COMMAND unittest_prime) # CMake recognizes its relationship to project commands
+# # include(GoogleTest)
+# gtest_discover_tests(${TSTS}) # registrating the test 
 
 ################################
-# GTest
+# Development Package method
 ################################
-project(googletest-git NONE)
+# Locate gtest after the *.a are added to /usr/lib
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+include_directories("~/training/coding/Cpp_practice/unittest_project/src/")
+SET(CMAKE_CXX_FLAGS  "-DGOOGLE_TEST_ACTIVE")
+add_executable(${TSTS} test_prime.cpp)
 
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.10.0
-)
-
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
-set(BUILD_GTEST ON CACHE BOOL "" FORCE)
-
-FetchContent_MakeAvailable(googletest)
-
-################################
-# Tests
-################################
-# Add test cpp file
-add_executable(${TESTNAME} testgtest.cpp)
-# Link test executable against gtest & gtest_main
-target_link_libraries(${TESTNAME} gtest gtest_main)
-
-
-# ######################
-# set(BINARY ${CMAKE_PROJECT_NAME}_tst)
-# file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.hpp *.cpp)# its like add_executable(ExampleProject file1.cpp file1.h)
-# set(SOURCES ${TEST_SOURCES})
-# add_executable(${BINARY} ${TEST_SOURCES})
-# add_test(NAME ${BINARY} COMMAND ${BINARY})#he compiled executable file is named ExampleProject_tst.
-# target_link_libraries(${BINARY} PUBLIC ${CMAKE_PROJECT_NAME}_lib gtest)
-##################
-# enable_testing()
-# add_executable(
-#   ../src/prime_test_complex.cpp
-#   unit_test
-#   ) # add this executable
-# add_subdirectory(../googletest) # add googletest subdirectory
-# target_link_libraries(
-#   prime_test PUBLIC gtest gtest_main) # link google test to this executable
-# include(CTest)
-# gtest_discover_tests(example) # Runs GTest with CTest
+target_include_directories(${TSTS} PUBLIC /home/sism/training/coding/Cpp_practice/unittest_project/src)
+target_link_libraries(${TSTS} PUBLIC ${LIB_PRIME} ${GTEST_LIBRARIES} pthread) # link executable to googletest

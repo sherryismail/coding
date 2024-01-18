@@ -1,0 +1,17 @@
+#
+# A simple makefile for compiling a c++ project
+#
+.DEFAULT_GOAL :=
+CC=g++
+CFLAGS=-c -Wall
+LDFLAGS=
+SOURCES = $(wildcard *.cpp)
+SOURCE_DIR=
+OBJECTS=$(SOURCES:.cpp=.o)
+all: clean
+
+%: %.cpp
+    $(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< 
+
+clean: 
+    rm -rf ./*.out

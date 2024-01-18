@@ -4,9 +4,11 @@
 #include <iostream>
 #include <algorithm>
 
-#include "prime_test.hpp"
+#include "prime.hpp"
 using namespace std;
-int is_it_prime(int * input, int T)
+class prime {
+    public:
+int is_it_prime(int input[], int T)
 {
     int prime = 1;
     for (int i=0; i < T; i++)
@@ -35,17 +37,19 @@ int is_it_prime(int * input, int T)
     }
     return 0;
 }
-#ifndef GOOGLETEST
-// int main() {
-//     /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
-//     int T,num, i=0;
-//     cin >> T;
-//     int * input = (int *) malloc (sizeof(int) * T);
-//     while(i < T){
-//         cin >> input[i];
-//         i++;
-//     }
-//     is_it_prime(input,T);
-//     return 0;
-// }
+};
+#ifndef GOOGLE_TEST_ACTIVE
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    int T, i=0;
+    class prime p;
+    cin >> T;
+    int * input = (int *) malloc (sizeof(int) * T);
+    while(i < T){
+        cin >> input[i];
+        i++;
+    }
+    p.is_it_prime(input,T);
+    return 0;
+}
 #endif
