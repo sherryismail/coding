@@ -1,4 +1,4 @@
-#include <../src/prime.hpp>
+#include <prime.hpp>
 #include <gtest/gtest.h>
 namespace Testing{
 // To use a test fixture, derive a class from testing::Test.
@@ -13,11 +13,11 @@ class PrimeNumberTest : public testing::Test {
   public:
   PrimeNumberTest(){} 
 };
-// TEST_F(PrimeNumberTest, valid_answers)
-// {
-//     int a[5] = {3,5,6,8,10};
-//     EXPECT_EQ(0,is_it_prime(a,5));
-// }
+TEST_F(PrimeNumberTest, valid_answers)
+{
+    int a[5] = {3,5,6,8,10};
+    EXPECT_EQ(0,is_it_prime(a,5));
+}
 TEST_F(PrimeNumberTest, always_true)
 {
     EXPECT_EQ(1, 1);
