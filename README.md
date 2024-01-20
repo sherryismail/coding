@@ -34,7 +34,11 @@ Perform these steps:
 ## Linux Setup
 Googletest could be added as a submodule or as a Linux utility
 ### Development package, as a part of Linux tools
-Download it as a pre-built library [Guide here on dev package](https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/)
+Download it as a pre-built library [Guide here on dev package](https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/). By installing libgtest-dev, two directories are created
+
+    /usr/src/gtest
+    /usr/src/googletest
+
 ```
     sudo apt install libgtest-dev build-essential cmake
     cd /usr/src/gtest

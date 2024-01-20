@@ -9,7 +9,6 @@ set(UNITTEST_ROOT_DIR ${CMAKE_SOURCE_DIR})
 set(UNITTEST_BUILD_DIR ${CMAKE_SOURCE_DIR}/build)
 
 project(${PROJECT_NAME} LANGUAGES CXX VERSION 1.000)
-enable_testing()
 
 #build tests
 add_subdirectory(src)
