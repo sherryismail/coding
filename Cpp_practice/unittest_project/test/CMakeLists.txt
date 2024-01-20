@@ -17,3 +17,16 @@ target_link_libraries(${TSTS} PUBLIC ${LIBS} ${GTEST_LIBRARIES} pthread) # link 
 
 # Multiple directories handler
 # target_include_directories(${TSTS} PUBLIC $<BUILD_INTERFACE:${UNITTEST_ROOT_DIR}/src;${UNITTEST_BUILD_DIR}/src>)
+
+# ################################
+# # Submodule method (Not recommended)
+# ################################
+# > git submodule add https://github.com/google/googletest.git
+# > git submodule update --init --recursive
+# hook and configure dependencies after googletest submodule is available
+# set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+# add_subdirectory(googletest EXCLUDE_FROM_ALL)
+# > git submodule deinit -f path/to/submodule # Remove the entry from .git/config
+# > rm -rf .git/modules/path/to/submodule # Remove the dir from the superproject's .git/modules
+# > git rm -f path/to/submodule # Remove the entry in .gitmodules and the dir located at path/to/submodule
+

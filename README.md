@@ -66,6 +66,19 @@ To collectively build src and unit test executables, and keep the auto-generated
 ```
     mkdir build && cd build
     cmake -S ../ -B . # -Src dir is parent, -Build dir is current 
+    make
+```
+### Run tests
+To run the tests, go into build directory
+```
+    ./build/src/main # Only source code executable
+    ./build/test/unittest_run 
+        [==========] Running 3 tests from 1 test suite.
+        [----------] Global test environment set-up.
+        [----------] 3 tests from MyTest
+        [ RUN      ] MyTest.valid_answers
+        [       OK ] MyTest.valid_answers (0 ms)
+        [  PASSED  ] 2 tests
 ```
 
 ### Submodule method
