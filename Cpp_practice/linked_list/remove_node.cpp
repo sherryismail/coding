@@ -15,7 +15,7 @@ class Node
 };
 class Solution{
     public:
-    Node* insert(Node *head,int data) {
+    Node* fifo_insert(Node *head,int data) {
         Node** current = &head; //not copying it for backup but use a **ptr that can be incremented
         while(*current != NULL) 
         {
@@ -27,7 +27,7 @@ class Solution{
         *current = new Node(data);
         return head;
     } 
-    void remove(Node ** head, int val) //if Node * head is passed then error if Node_to_remove = first node
+    void RemoveNthFromStart(Node ** head, int val) //if Node * head is passed then error if Node_to_remove = first node
     {
         Node * prev = *head;
         Node ** current = head, * temp = nullptr;
@@ -39,7 +39,7 @@ class Solution{
                 if(current == head)//special case: node to be deleted is the first one
                 {
                     temp = *head;
-                    *head = (*head)->next;
+                    *head = (*head)->next;//head = &(*head)->next  is wrong!!
                     temp->next = nullptr;//disconnect old head node
                     current = head;
                     prev = *current;
@@ -150,6 +150,20 @@ class Solution{
         //pass pointer to the head so that if position=length, then head node is removed
         RemoveNthFromEndr(head,&count, position, prev);
     }
+    Node * fifo_remove(Node ** head, int index)
+    {
+        Node ** current = head;
+        Node * prev = *head;
+        int i=1;
+        while(i < index)
+        {
+            prev = *current;
+            current = &(*current)->next;
+            i++;
+        }
+        prev->next = (*current)->next;
+        return *head;
+    }
 };
 
 
@@ -157,7 +171,7 @@ int main(int argc, char * argv[])
 {
     // If /n is passed to the .exe, display numbered listing
     // of environment variables.
-    if ( (argc >1) || _stricmp(argv[1], "\n" ) == 0 )
+    if ( (argc >1) || strcmp(argv[1], "\n" ) == 0 )
          cout << "This program will remove nth node from the **END**. \nEnter total number of Nodes to enter: ";
     else
         cout << "This program will remove nth node from the **START**.\nEnter total number of Nodes to enter: ";
@@ -168,23 +182,28 @@ int main(int argc, char * argv[])
     cout << "Enter all the node->data: ";
     while(T-->0){
         cin>>data;
-        head=mylist.insert(head,data);
+        head=mylist.fifo_insert(head,data);
     }	
     
-    cout << "Enter the data value to remove the corresponding node: ";
+    cout << "Enter the data value to remove the corresponding node from the fifo: ";
     cin>>remove;
-    mylist.remove(&head, remove);//if remove(head, remove) then error happens incase first node is to be removed
+    mylist.RemoveNthFromStart(&head, remove);//if remove(head, remove) then error happens incase first node is to be removed
 	mylist.display(head);
     cout <<std::endl<< "Length of the list: "<<mylist.length_recursive(head)<<endl;
 
-    cout << "To remove nth node from the end (iterative), Enter n: ";
-    cin>>remove;
-    head = mylist.RemoveNthFromEnd1(head,remove);
-    mylist.display(head);
+    // cout << "To remove nth node from the end (iterative), Enter n: ";
+    // cin>>remove;
+    // head = mylist.RemoveNthFromEnd1(head,remove);
+    // mylist.display(head);
     
-    cout <<endl<< "To remove nth node from the end (recursively), Enter n: ";
+    // cout <<endl<< "To remove nth node from the end (recursively), Enter n: ";
+    // cin>>remove;
+    // mylist.RemoveNthFromEnd2(&head,mylist.length_recursive(head) - remove);
+    // mylist.display(head);
+
+    cout <<endl<< "To remove nth node from the start, Enter index: ";
     cin>>remove;
-    mylist.RemoveNthFromEnd2(&head,mylist.length_recursive(head) - remove);
+    head=mylist.fifo_remove(&head,remove);
     mylist.display(head);
 	
 }

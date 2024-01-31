@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
+/* https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
  * Complete the 'repeatedString' function below.
  *
  * The function is expected to return a LONG_INTEGER.

@@ -41,18 +41,18 @@ int partition_first(vector<int> &arr, int first, int last)
     }else
         return -1;
 }
-void quick_sort_first(vector<int> &arr, int first, int last)
+void quick_sort_first(vector<int> &arr, int first, int last)//void return because change in place
 {
     //base case
     if(first >= last)
         return;
+    //recursive case
     int partition = partition_first(arr,first,last);
     if(partition != -1)
     {
     quick_sort_first(arr,first,partition-1);
     quick_sort_first(arr,partition+1,last);
     }
-    
 }
 int main (void)
 {
