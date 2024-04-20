@@ -59,6 +59,12 @@ int check_set_bits(int x, int y)
         n = n & (n - 1); // clear the least significant bit set
         count++;
     }
+    //for set bits in a simple number: use this
+    // while (n > 0)
+    // {
+    //     count += n & 1;
+    //     n >>= 1;
+    // }
     return count;
 }
 int main ()
@@ -68,5 +74,6 @@ int main ()
     // how to intiialise vector from array?
     cout << "Most ones are "<<count_most_ones(a, size)<<" in the array"<<endl;
     cout << "The total number of bits to be flipped is "<< check_set_bits(0,80)<<endl;
+
     return 0;
 }

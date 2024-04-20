@@ -9,7 +9,7 @@ Given the root of a binary tree, return the level order traversal of its nodes' 
    input root = [3,9,20,null,null,15,7]
    output [[3],[9,20],[15,7]]
 
-   TODO
+  // web crawling, social network analysis, and shortest path finding. 
    */
 using namespace std;
 class Node {
@@ -58,10 +58,10 @@ class Solution {
         if(!root) return;
         queue<Node *> q;
         q.push(root);
-
+        Node * curr;
         while(q.size() >0)
         {
-            Node * curr = q.front();
+            curr = q.front();
             q.pop();
             //check this level first
             cout << curr->data << " ";
