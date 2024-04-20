@@ -93,7 +93,7 @@ int main() {
     int data;
     cout << "Enter total elements in a binary tree: ";
     std::cin >> t;
-     cout << "Enter elements separated by space: ";
+     cout << "First number becomes root. Enter elements separated by space: ";
     while(t-- > 0) {
         std::cin >> data;
         root = myTree.insert(root, data);
