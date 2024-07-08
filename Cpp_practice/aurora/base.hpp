@@ -5,7 +5,7 @@
 #define MAX_BUFF                100
 #define MSG_DEFAULT_SIZE        0xA
 #define BASE_HEADER_IN_BYTES    0x8
-#define PAYLOAD_SIZE            0xA
+#define PAYLOAD_SIZE            0xC
 using namespace std;
 class Base {
 private:

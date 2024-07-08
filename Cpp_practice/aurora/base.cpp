@@ -89,10 +89,10 @@ void Base::send(char * output){
     *(uint32_t *)pOutput = payloadLength;
     pOutput += 4;
     memcpy(pOutput, payload, payloadLength);
-    cout << "Tx In bytes:";
-    for (int i=0; i < payloadLength+BASE_HEADER_IN_BYTES; i++)
-        cout << "["<< i <<"]="<<output[i]<<",";
-    cout <<endl;
+    // cout << "send() full frame:";
+    // for (int i=0; i < payloadLength+BASE_HEADER_IN_BYTES; i++)
+    //     cout << "["<< i <<"]="<<output[i]<<",";
+    // cout <<endl;
 }
 void Base::receive(char * rx){
     char * pRx = rx;
@@ -109,9 +109,10 @@ void Base::receive(char * rx){
     memcpy(temp, pRx, payloadLength);
     setPayload((const uint8_t *) temp,payloadLength);
     free(temp);
-    cout << endl<<"Rx payload:";
-    for (int i=0; i < payloadLength; i++)
-        cout << "["<< i <<"]="<<pRx[i]<<",";
+    // cout << endl<<"receive() only payload:";
+    // for (int i=0; i < payloadLength; i++)
+    //     cout << "["<< i <<"]="<<pRx[i]<<",";
+    // cout <<endl;
 }
 void Base::receiveText(string input){
     std::istringstream iss(input);// stoi(input)
