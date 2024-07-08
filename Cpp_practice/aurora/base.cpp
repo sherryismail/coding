@@ -49,7 +49,7 @@ uint32_t Base::getPayloadLength() {return payloadLength;}
 void Base::setPayloadLength(uint32_t plLength) {payloadLength = plLength;}
 
 // Getter for payload
-uint8_t* Base::getPayload() {return &payload[0];}//?
+uint8_t* Base::getPayload() {return payload;}
 
 // Setter for payload
 void Base::setPayload(const uint8_t* pData, uint32_t length) {
@@ -57,13 +57,16 @@ void Base::setPayload(const uint8_t* pData, uint32_t length) {
     length = std::min(length, (uint32_t)MAX_BUFF);
     payloadLength = length;
     payload = new uint8_t[payloadLength];
-    memcpy(payload, pData, payloadLength);
+    if (pData != nullptr)
+        memcpy(payload, pData, payloadLength);
 }
 //This sends to a File
 string Base::sendText(uint32_t * totalBuffLength){
     std:ostringstream message;
-    message << hex << setfill('0') << setw(4) <<messageId << senderId //set 4 characters
-            << receiverId << setfill('0') << setw(8) << payloadLength
+    message << hex << setfill('0') << setw(4) <<messageId //set 4 characters
+            << setfill('0') << setw(1) << senderId 
+            << setfill('0') << setw(1) << receiverId
+            << setfill('0') << setw(8) << payloadLength
             << std::string(reinterpret_cast<char *>(payload), payloadLength); 
 
     *totalBuffLength = message.str().length();
@@ -86,9 +89,10 @@ void Base::send(char * output){
     *(uint32_t *)pOutput = payloadLength;
     pOutput += 4;
     memcpy(pOutput, payload, payloadLength);
-    // cout << "In bytes:";
-    // for (int i=0; i < payloadLength+BASE_HEADER_IN_BYTES; i++)
-    //     cout << "["<< i <<"]="<<output[i]<<",";
+    cout << "Tx In bytes:";
+    for (int i=0; i < payloadLength+BASE_HEADER_IN_BYTES; i++)
+        cout << "["<< i <<"]="<<output[i]<<",";
+    cout <<endl;
 }
 void Base::receive(char * rx){
     char * pRx = rx;
@@ -103,28 +107,36 @@ void Base::receive(char * rx){
     pRx += 4;
     char * temp = (char *)malloc(payloadLength);
     memcpy(temp, pRx, payloadLength);
-    cout << endl << "resize...... "<< endl;
     setPayload((const uint8_t *) temp,payloadLength);
     free(temp);
-    // cout << "In bytes:";
-    // for (int i=0; i < payloadLength+BASE_HEADER_IN_BYTES; i++)
-    //     cout << "["<< i <<"]="<<output[i]<<",";
+    cout << endl<<"Rx payload:";
+    for (int i=0; i < payloadLength; i++)
+        cout << "["<< i <<"]="<<pRx[i]<<",";
 }
 void Base::receiveText(string input){
     std::istringstream iss(input);// stoi(input)
     // std::vector<uint8_t> bytes(input.begin(), input.end());//or memcpy(char, str,length)
-    // cout << endl<< "Rx Info packet: "<< endl;
-    // for (auto i:input)
-    //     cout << hex << i;
-    // cout << endl;
+    cout << endl<< "Rx Info packet: "<< endl;
+    for (auto i:input)
+        cout << hex << i;
+    cout << endl;
     iss >> setw(4) >> hex >>messageId >> senderId >> receiverId;
-    uint32_t n = 0x20, i=0; //'0' follow
-    while (n== 0x20)
+    uint32_t n = 0x30, i=0; //'0' follow
+    while (n== 0x30)
     {
-        iss >> n; i++;
+        iss >> hex>>n; i++;
     }  
-    iss >>setw(8) >>payloadLength;
-    iss.read(reinterpret_cast<char*>(payload), payloadLength);//setPayload();
+    iss.ignore('0');//does not work
+    iss >>setw(8) >> setfill('0')>> hex >>payloadLength;//does not change
+    cout << "MsgId="<<hex << messageId<< " SndId="<< hex<< (int)senderId << " rcvId="<< (int)receiverId <<endl;
+    cout << "extra 0s = " << i <<", payloadLength= " << payloadLength<<endl;
+    
+    string temp(payloadLength, '0');
+    setPayload((uint8_t *)&temp, payloadLength);
+    iss.read(reinterpret_cast<char*>(payload), payloadLength);//could use setPayload();?
+    cout <<"RxText payload: "<< endl;
+    for (int i = 0; i < payloadLength; i++)
+        cout << "["<< i <<"]="<<hex<<payload[i]<<",";
 }
 // Method to display message details
 //what doe s aconst do?
