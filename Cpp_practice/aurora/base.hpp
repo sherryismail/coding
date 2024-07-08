@@ -30,7 +30,7 @@ public:
     uint8_t *getPayload();
     void setPayload(const uint8_t *pData, uint32_t length);
 
-    virtual string sendText(uint32_t * totalBuffLength);
+    virtual string sendText();
     virtual void send(char * output);
     virtual void receiveText(string input);
     virtual void receive(char * rx);
@@ -59,7 +59,7 @@ public:
     void setAction(uint8_t n);
     uint64_t getName();
     void setName(uint64_t n);
-    virtual string sendText(uint32_t * totalBuffLength);
+    virtual string sendText();
     virtual void receiveText(string input);
     virtual void send(char * output);
     virtual void receive(char * rx);

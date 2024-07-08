@@ -7,22 +7,13 @@
 #include <cstring> //memcpy
 
 using namespace std;
-Base::Base() {
-        messageId = 0;
-        senderId = 0;
-        receiverId = 0;
-        payloadLength = MSG_DEFAULT_SIZE;
-        payload = new uint8_t[MSG_DEFAULT_SIZE];
-    }
+Base::Base():
+senderId(0), receiverId(0), payloadLength(0), payload(nullptr), messageId(0) {}
 
-Base::Base(uint16_t msg, uint8_t sender, uint8_t rcv, uint32_t length, const uint8_t * pData){
-    messageId = msg;
-    senderId = sender;
-    receiverId = rcv;
-    payloadLength = length;
-    payload = new uint8_t[length];
-    if (pData != nullptr)//TEST if null
-        memcpy(payload, pData, length);
+Base::Base(uint16_t msg, uint8_t sender, uint8_t rcv, uint32_t length, const uint8_t * pData)
+: messageId(msg), senderId(sender), receiverId(rcv), payloadLength(length), payload(nullptr) 
+{
+    setPayload(pData, length);
 }
 Base::~Base() {
     delete[] payload;//free the dynamically created memory
@@ -46,6 +37,8 @@ void Base::setReceiverId(uint8_t rcvId) { receiverId = rcvId;}
 uint32_t Base::getPayloadLength() {return payloadLength;}
 
 // Setter for payloadLength (mem leak, data corruption, use setPayload instead)
+// terminate called after throwing an instance of 'std::logic_error'
+//  what():  basic_string::_M_construct null not valid
 void Base::setPayloadLength(uint32_t plLength) {payloadLength = plLength;}
 
 // Getter for payload
@@ -59,21 +52,6 @@ void Base::setPayload(const uint8_t* pData, uint32_t length) {
     payload = new uint8_t[payloadLength];
     if (pData != nullptr)
         memcpy(payload, pData, payloadLength);
-}
-//This sends to a File
-string Base::sendText(uint32_t * totalBuffLength){
-    std:ostringstream message;
-    message << hex << setfill('0') << setw(4) <<messageId //set 4 characters
-            << setfill('0') << setw(1) << senderId 
-            << setfill('0') << setw(1) << receiverId
-            << setfill('0') << setw(8) << payloadLength
-            << std::string(reinterpret_cast<char *>(payload), payloadLength); 
-
-    *totalBuffLength = message.str().length();
-    // cout << "Tx Info packet: "<< endl;
-    // for (auto i:message.str())
-    //     cout << hex <<i<< " ";
-    return message.str();
 }
 
 //This sends only the bytes to the driver
@@ -114,30 +92,47 @@ void Base::receive(char * rx){
     //     cout << "["<< i <<"]="<<pRx[i]<<",";
     // cout <<endl;
 }
+
+//This sends to a File
+string Base::sendText(){
+    //time spent on not using a separator and fixed bytes->string
+    ostringstream oss;
+    oss<< hex << setw(4) << messageId << "|"
+    << setw(2) <<static_cast<int>(senderId) << "|"
+    << setw(2) <<static_cast<int>(receiverId) << "|"
+    << setw(8) <<payloadLength << "|";
+    for (uint32_t i = 0; i < payloadLength; ++i) {
+            oss << setw(2) << setfill('0') << hex << static_cast<int>(payload[i]);
+        }
+    return oss.str();
+}
 void Base::receiveText(string input){
-    std::istringstream iss(input);// stoi(input)
-    // std::vector<uint8_t> bytes(input.begin(), input.end());//or memcpy(char, str,length)
-    cout << endl<< "Rx Info packet: "<< endl;
-    for (auto i:input)
-        cout << hex << i;
-    cout << endl;
-    iss >> setw(4) >> hex >>messageId >> senderId >> receiverId;
-    uint32_t n = 0x30, i=0; //'0' follow
-    while (n== 0x30)
-    {
-        iss >> hex>>n; i++;
-    }  
-    iss.ignore('0');//does not work
-    iss >>setw(8) >> setfill('0')>> hex >>payloadLength;//does not change
-    cout << "MsgId="<<hex << messageId<< " SndId="<< hex<< (int)senderId << " rcvId="<< (int)receiverId <<endl;
-    cout << "extra 0s = " << i <<", payloadLength= " << payloadLength<<endl;
-    
-    string temp(payloadLength, '0');
-    setPayload((uint8_t *)&temp, payloadLength);
-    iss.read(reinterpret_cast<char*>(payload), payloadLength);//could use setPayload();?
-    cout <<"RxText payload: "<< endl;
-    for (int i = 0; i < payloadLength; i++)
-        cout << "["<< i <<"]="<<hex<<payload[i]<<",";
+    std::istringstream ss(input);
+    // cout << endl<< "Rx Info packet: "<< endl;
+    // for (auto i:input)
+    //     cout << hex << i;
+    // cout << endl;
+    string segment;
+    getline(ss, segment, '|');
+    messageId = (uint16_t)(stoi(segment, nullptr, 16));
+
+    getline(ss, segment, '|');
+    senderId = static_cast<uint8_t>(stoi(segment, nullptr, 16));//TEST if hex works
+
+    getline(ss, segment, '|');
+    receiverId = static_cast<uint8_t>(stoi(segment, nullptr, 16));
+
+    getline(ss, segment, '|');
+    uint32_t plLength = static_cast<uint32_t>(stoul(segment, nullptr, 16));
+    //TEST plLength = 0
+    uint8_t temp[plLength];//no new heap
+    setPayload(temp,plLength);
+
+    string payloadStr;
+    getline(ss, payloadStr, '|');
+    for (uint32_t i = 0; i < payloadLength; ++i) {
+        payload[i] = static_cast<uint8_t>(stoi(payloadStr.substr(i * 2, 2), nullptr, 16));
+    }
 }
 // Method to display message details
 //what doe s aconst do?

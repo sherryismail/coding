@@ -36,7 +36,7 @@ void Film::setAction(uint8_t a) {action = a & 0b00111111;}
 uint64_t Film::getName() {return name; }
 void Film::setName(uint64_t n) {name = n;}
 
-string Film::sendText(uint32_t * totalBuffLength)
+string Film::sendText()
 {
     uint8_t preamble = lights << 7
         | camera << 6 | action & 0b00111111;
@@ -50,8 +50,6 @@ string Film::sendText(uint32_t * totalBuffLength)
     uint8_t * src = getPayload();
     memcpy(&filmy[0], src, 9);
     oss << filmy;
-
-    *totalBuffLength = oss.str().length();
 
     cout << "Tx Info packet: "<< endl;
     for (auto i:oss.str())
@@ -70,41 +68,6 @@ void Film::decodeFilmPayload(uint8_t payload)
 
 void Film::receiveText(string input){
     Base::receiveText(input);
-    // std::istringstream iss(input);
-    // uint16_t msgId = 0;
-    // uint8_t sndId, rcvId, x,y;
-    // uint32_t plLength;
-
-    // cout << "Temp packet: "<< endl;
-    // for (auto i:input)
-    //     cout << hex <<i<< " ";
-
-    // iss >> hex>> setw(4)>> msgId;
-    // iss >> setw(1) >> hex>> sndId;
-    // iss >> setw(1) >> hex>>rcvId;
-    // // iss >> setw(1) >> hex>>x;
-    // // iss >> setw(1) >> hex>>y;
-    // iss >> setw(8) >>hex>>plLength;
-    // cout << endl<< "Rx Info packet: "<< endl;
-    // cout << "Msg "<< hex << msgId<<endl;
-    // cout << "Snd " << hex << (int)sndId<<endl;
-    // cout << "Rcv "<< hex << (int)rcvId<<endl;
-    // //  cout << "x " << hex << x<<endl;
-    // // cout << "y "<< hex << y<<endl;
-    // cout << "plLength "<< hex << plLength<<endl;
-    
-    //------------------
-    // uint32_t n = 0x20; //'0' follow
-    // while (n == 0x20)
-    // {
-    //     iss >> n;
-    //     cout << "another 0 ";
-    // }  
-    // 
-    // if (plLength != 9) {
-    //     cerr << "Invalid payload length" <<plLength << endl;
-    //     return;
-    // }
 
     // uint8_t filmy[9];
     // for (uint32_t i = 0; i < 9; ++i) {
@@ -132,22 +95,6 @@ void Film::receiveText(string input){
 
     // cout << "light"<<lights <<" camera"<< camera << " action"<<action<<endl;
     // cout << "name "<<name;
-
-
-    // while (n== 0x20)
-    // {
-    //     iss >> n; i++;
-    // }  
-    // iss >>setw(8) >>payloadLength;
-    // if (payloadLength > MAX_BUFF){
-    //     cout << "Error: payload size is too large"<< endl;
-    //     exit(0);
-    // }
-    // char temp [payloadLength];
-    // iss.read(reinterpret_cast<char*>(temp), payloadLength);
-    // setPayload((const uint8_t *)temp, payloadLength);
-    // decodeFilmPayload((uint8_t)temp[0]);
-    // delete[] temp;
 }
 
 void Film::send(char * output){
