@@ -4,17 +4,18 @@
 #include <iostream> //cout
 #include <iomanip> //setfill and setw()
 using namespace std;
-Film::Film() : Base() {
-    lights = false;
-    camera = true;
-    action = 0x2F;//ASCII print 'o'
-    name = 0xdeadbeef;
+Film::Film() : Base(), lights(false), camera(true), action(0x2F), name(0xdeadbeef) {
+    initialisePreamble();
 }
 Film::Film(uint16_t msg, uint8_t sender, uint8_t rcv, 
     bool lights, bool camera, uint8_t action, uint64_t name)
     : Base(msg, sender, rcv, 9, nullptr), lights(lights), camera(camera), action(action), name(name)
     {
-        //Prepare payload
+        initialisePreamble();
+    }
+
+void Film::initialisePreamble(){
+//Prepare payload
         uint8_t preamble = lights << 7
         | camera << 6 | action & 0b00111111;
 
@@ -25,8 +26,7 @@ Film::Film(uint16_t msg, uint8_t sender, uint8_t rcv,
         filmy[0] = preamble;
         memcpy(filmy+1, &name, 8);
         setPayload(filmy, 9);
-    }
-
+}
 bool Film::getLights() {return lights; }
 void Film::setLights(bool l) {lights = l;}
 bool Film::getCamera() {return camera; }
@@ -38,63 +38,31 @@ void Film::setName(uint64_t n) {name = n;}
 
 string Film::sendText()
 {
+    //prepare the payload
     uint8_t preamble = lights << 7
         | camera << 6 | action & 0b00111111;
 
-    ostringstream oss;
-    oss << hex << setfill('0') << setw(4) <<getMessageId();
-    oss << setw(1) << static_cast<int>(getSenderId());
-    oss << setw(1) << static_cast<int>(getReceiverId()); //time spent figuring out static_cast
-    oss << setfill('0') << setw(8) << getPayloadLength();
     uint8_t filmy[getPayloadLength()];
-    uint8_t * src = getPayload();
-    memcpy(&filmy[0], src, 9);
-    oss << filmy;
-
-    cout << "Tx Info packet: "<< endl;
-    for (auto i:oss.str())
-        cout << hex <<i<< " ";
-    cout << endl;
-    return oss.str();
+    filmy[0] = preamble;
+    memcpy(filmy+1, &name, 8);
+    setPayload(filmy, 9);
+    return Base::sendText();
 }
 
-void Film::decodeFilmPayload(uint8_t payload)
+void Film::decodeFilmPayload(uint8_t preamble)
 {
-    uint8_t preamble;
-    lights = (preamble & 0x8 >> 7);
-    camera = (preamble & 0x4 >> 6);
-    action = (preamble & 0b00111111 >> 2);
+    lights = (preamble >> 7);
+    camera = (preamble >> 6);
+    action = (preamble & 0b00111111);
 }
 
 void Film::receiveText(string input){
     Base::receiveText(input);
-
-    // uint8_t filmy[9];
-    // for (uint32_t i = 0; i < 9; ++i) {
-    //     int byte;
-    //     iss >> std::hex >> byte;
-    //     filmy[i] = static_cast<uint8_t>(byte);
-    // }
-
-    // // Update the base class members
-    // setPayload(filmy, 9);
-
-    // // Update Film-specific members
-    // uint8_t preamble = filmy[0];
-    // lights = preamble & 0b10000000;
-    // camera = preamble & 0b01000000;
-    // action = preamble & 0b00111111;
-
-    // uint64_t beName;
-    // memcpy(&beName, filmy + 1, 8);
-    // name = be64toh(beName);
-
-    // // Set the message ID, sender ID, and receiver ID
-    // setSenderId(sndId);
-    // setReceiverId(rcvId);
-
-    // cout << "light"<<lights <<" camera"<< camera << " action"<<action<<endl;
-    // cout << "name "<<name;
+    //decode the payload
+    uint8_t * rx = getPayload();
+    decodeFilmPayload(rx[0]);
+    if (getPayloadLength() == 9)
+        name = *(uint64_t *)&rx[1]; //very C like
 }
 
 void Film::send(char * output){
@@ -102,7 +70,18 @@ void Film::send(char * output){
 }
 void Film::receive(char * output){
     Base::receive(output);
+    //decode the payload
+    uint8_t * rx = getPayload();
+    decodeFilmPayload(rx[0]);
+    if (getPayloadLength() == 9)
+        name = *(uint64_t *)&rx[1]; //very C like
 }
 void Film::displayMessage() {
+    uint64_t x= name;
+    cout << "Lights:" + std::to_string(lights) + ", "
+        << "Camera: " + std::to_string(camera) + ", " //seg fault because + not <<
+        << "Action: " << hex << setw(2) << setfill('0') << static_cast<int>(action) << ", "
+        << "Name: "  << hex << setw(2) << setfill('0') << name <<"\n";
     Base::displayMessage();
+
 }

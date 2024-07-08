@@ -51,6 +51,7 @@ public:
     Film();
     Film(uint16_t msg, uint8_t sender, uint8_t rcv,
     bool lights, bool camera, uint8_t action, uint64_t name);
+    void initialisePreamble();
     bool getLights();
     void setLights(bool l);
     bool getCamera();

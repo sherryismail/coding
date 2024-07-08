@@ -54,8 +54,10 @@ void Base::setPayload(const uint8_t* pData, uint32_t length) {
         memcpy(payload, pData, payloadLength);
 }
 
-//This sends only the bytes to the driver
+//This sends only the bytes to the driver. ALERT: The size should be preallocated
 void Base::send(char * output){
+    if (output == nullptr)
+        return;
     char * pOutput = output;
     *(uint16_t *)pOutput = messageId;
     pOutput += 2;
@@ -135,7 +137,7 @@ void Base::receiveText(string input){
     }
 }
 // Method to display message details
-//what doe s aconst do?
+//what does a const do?
 void Base::displayMessage() {
         std:ostringstream message;
         message << "Message ID: "<< std::to_string(messageId) + "\n"
@@ -143,35 +145,5 @@ void Base::displayMessage() {
             << "Receiver ID: " + std::to_string(receiverId) + "\n"
             << "Payload Length: " + std::to_string(payloadLength) + "\n"
             << "Payload: " + std::string(payload, payload + payloadLength)+ "\n";//payload was char array
-            // std::string(reinterpret_cast<char *>(payload), payloadLength) + "\n"; // payload was char array
     std::cout << message.str();
 }
-// error: ‘virtual’ outside class declaration only in declaration
-/* strings = string((char *) &buffer);
- uint32_t x = 0x1234;
-    cout << hex<< x << ", " << htons(x) << dec<< endl;
-  // Copy constructor
-    Message(const Message& other) 
-        : messageId(other.messageId), senderId(other.senderId), receiverId(other.receiverId), payloadLength(other.payloadLength) {
-        payload = new char[payloadLength];
-        std::memcpy(payload, other.payload, payloadLength);
-    }
-
-    // Assignment operator
-    Message& operator=(const Message& other) {
-        if (this == &other) {
-            return *this;
-        }
-
-        messageId = other.messageId;
-        senderId = other.senderId;
-        receiverId = other.receiverId;
-        payloadLength = other.payloadLength;
-
-        delete[] payload;
-        payload = new char[payloadLength];
-        std::memcpy(payload, other.payload, payloadLength);
-
-        return *this;
-        strcpy(char_array, s.c_str()); // copying the contents of the string to char array 
-    }*/
