@@ -16,8 +16,8 @@ Film::Film(uint16_t msg, uint8_t sender, uint8_t rcv,
 
 void Film::initialisePreamble(){
 //Prepare payload
-        uint8_t preamble = lights << 7
-        | camera << 6 | action & 0b00111111;
+        uint8_t preamble = (lights << 7)
+        | (camera << 6) | (action & 0b00111111);
 
         //64 bits + 8 bit preamble = 9 bytes
         uint8_t filmy[9];
@@ -39,8 +39,8 @@ void Film::setName(uint64_t n) {name = n;}
 string Film::sendText()
 {
     //prepare the payload
-    uint8_t preamble = lights << 7
-        | camera << 6 | action & 0b00111111;
+    uint8_t preamble = (lights << 7)
+        | (camera << 6) | (action & 0b00111111);
 
     uint8_t filmy[getPayloadLength()];
     filmy[0] = preamble;
@@ -77,7 +77,6 @@ void Film::receive(char * output){
         name = *(uint64_t *)&rx[1]; //very C like
 }
 void Film::displayMessage() {
-    uint64_t x= name;
     cout << "Lights:" + std::to_string(lights) + ", "
         << "Camera: " + std::to_string(camera) + ", " //seg fault because + not <<
         << "Action: " << hex << setw(2) << setfill('0') << static_cast<int>(action) << ", "

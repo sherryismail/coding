@@ -8,7 +8,7 @@
 
 using namespace std;
 Base::Base():
-senderId(0), receiverId(0), payloadLength(0), payload(nullptr), messageId(0) {}
+messageId(0), senderId(0), receiverId(0), payloadLength(0), payload(nullptr) {}
 
 Base::Base(uint16_t msg, uint8_t sender, uint8_t rcv, uint32_t length, const uint8_t * pData)
 : messageId(msg), senderId(sender), receiverId(rcv), payloadLength(length), payload(nullptr) 
@@ -139,7 +139,7 @@ void Base::receiveText(string input){
 // Method to display message details
 //what does a const do?
 void Base::displayMessage() {
-        std:ostringstream message;
+        ostringstream message;
         message << "Message ID: "<< std::to_string(messageId) + "\n"
             << "Sender ID: " + std::to_string(senderId) + "\n"
             << "Receiver ID: " + std::to_string(receiverId) + "\n"

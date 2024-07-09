@@ -8,13 +8,13 @@
 #define PAYLOAD_SIZE            0xC
 using namespace std;
 class Base {
+protected:
+    uint16_t messageId;
 private:
     uint8_t senderId;
     uint8_t receiverId;
     uint32_t payloadLength;
     uint8_t *payload;
-protected:
-    uint16_t messageId;
 public:
     Base();
     Base(uint16_t msg, uint8_t sender, uint8_t rcv, uint32_t length, const uint8_t *pData);
