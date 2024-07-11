@@ -25,15 +25,15 @@ public:
     void setSenderId(uint8_t sndId);
     uint8_t getReceiverId();
     void setReceiverId(uint8_t rcvId);
-    void setPayloadLength(uint32_t plLength);
+    int8_t setPayloadLength(uint32_t plLength);
     uint32_t getPayloadLength();
     uint8_t *getPayload();
-    void setPayload(const uint8_t *pData, uint32_t length);
+    int8_t setPayload(const uint8_t *pData, uint32_t length);
 
     virtual string sendText();
     virtual void send(char * output);
     virtual void receiveText(string input);
-    virtual void receive(char * rx);
+    virtual int8_t receive(char * rx);
     void displayMessage();
 };
 
@@ -63,7 +63,7 @@ public:
     virtual string sendText();
     virtual void receiveText(string input);
     virtual void send(char * output);
-    virtual void receive(char * rx);
+    virtual int8_t receive(char * rx);
     void displayMessage();
     void decodeFilmPayload(uint8_t p);
 };

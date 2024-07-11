@@ -13,6 +13,8 @@ messageId(0), senderId(0), receiverId(0), payloadLength(0), payload(nullptr) {}
 Base::Base(uint16_t msg, uint8_t sender, uint8_t rcv, uint32_t length, const uint8_t * pData)
 : messageId(msg), senderId(sender), receiverId(rcv), payloadLength(length), payload(nullptr) 
 {
+    if (pData == nullptr) //GTEST: Add a printf although this is checked later
+        cout << "Payload is nullptr";
     setPayload(pData, length);
 }
 Base::~Base() {
@@ -39,19 +41,33 @@ uint32_t Base::getPayloadLength() {return payloadLength;}
 // Setter for payloadLength (mem leak, data corruption, use setPayload instead)
 // terminate called after throwing an instance of 'std::logic_error'
 //  what():  basic_string::_M_construct null not valid
-void Base::setPayloadLength(uint32_t plLength) {payloadLength = plLength;}
+int8_t Base::setPayloadLength(uint32_t plLength) {
+    if (plLength > MAX_BUFF)//Changing from void to error code return during GTEST
+        return -1;
+    else{
+        payloadLength = plLength;
+        return 0;
+    }
+    }
 
 // Getter for payload
 uint8_t* Base::getPayload() {return payload;}
 
 // Setter for payload
-void Base::setPayload(const uint8_t* pData, uint32_t length) {
-    delete[] payload;//TEST if this called and pData is null
-    length = std::min(length, (uint32_t)MAX_BUFF);
+int8_t Base::setPayload(const uint8_t* pData, uint32_t length) {
+    delete[] payload; //GTEST: free(): double free detected in tcache 2 if called with receive()->malloc
+    length = std::min(length, (uint32_t)MAX_BUFF); //GTEST that length is not too high
+    if (length == 0)//GTEST: pData is valid but length=0
+        return -1;
     payloadLength = length;
-    payload = new uint8_t[payloadLength];
-    if (pData != nullptr)
+    payload = new uint8_t[payloadLength];  
+    if (pData != nullptr) //GTEST : Seg fault if pData = null
+    {
         memcpy(payload, pData, payloadLength);
+        return 0;
+    }
+    else
+        return -2;
 }
 
 //This sends only the bytes to the driver. ALERT: The size should be preallocated
@@ -65,7 +81,6 @@ void Base::send(char * output){
     pOutput++;
     *pOutput = receiverId;
     pOutput++;
-    //TEST VALUE payloadLength = (32 << 8)|33;
     *(uint32_t *)pOutput = payloadLength;
     pOutput += 4;
     memcpy(pOutput, payload, payloadLength);
@@ -74,7 +89,9 @@ void Base::send(char * output){
     //     cout << "["<< i <<"]="<<output[i]<<",";
     // cout <<endl;
 }
-void Base::receive(char * rx){
+int8_t Base::receive(char * rx){// GTEST: should have return codes
+    if (rx == nullptr)
+        return -3;
     char * pRx = rx;
     messageId = *(uint16_t *)pRx;
     pRx += 2;
@@ -82,13 +99,22 @@ void Base::receive(char * rx){
     pRx++;
     receiverId = *pRx;
     pRx++;
-    //TEST VALUE payloadLength = (32 << 8)|33;
     payloadLength = *(uint32_t *)pRx;
+    if (payloadLength > MAX_BUFF){ //GTEST: if corrupt pkt
+        cout << "Rx payload length is too high"<<endl;
+        return -1;
+    }
+    if (payloadLength == 0)//GTEST
+    {
+        cout << "Rx payload length is zero"<<endl;
+        return -2;
+        /*We could clear out the payload buffer here so the user does not 
+        accidentally mistake the stale data as a a valid one. Or the caller
+        can handle the return code to not read *rx
+        */
+    }
     pRx += 4;
-    char * temp = (char *)malloc(payloadLength);
-    memcpy(temp, pRx, payloadLength);
-    setPayload((const uint8_t *) temp,payloadLength);
-    free(temp);
+    return setPayload((const uint8_t *) pRx,payloadLength);
     // cout << endl<<"receive() only payload:";
     // for (int i=0; i < payloadLength; i++)
     //     cout << "["<< i <<"]="<<pRx[i]<<",";
@@ -132,6 +158,7 @@ void Base::receiveText(string input){
 
     string payloadStr;
     getline(ss, payloadStr, '|');
+    //every byte is 2 HEX characters
     for (uint32_t i = 0; i < payloadLength; ++i) {
         payload[i] = static_cast<uint8_t>(stoi(payloadStr.substr(i * 2, 2), nullptr, 16));
     }

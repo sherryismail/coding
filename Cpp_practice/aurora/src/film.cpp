@@ -19,7 +19,7 @@ void Film::initialisePreamble(){
         uint8_t preamble = (lights << 7)
         | (camera << 6) | (action & 0b00111111);
 
-        //64 bits + 8 bit preamble = 9 bytes
+        //64 bits + 8 bit preamble = 9 bytes can it be __packed___?
         uint8_t filmy[9];
         //preamble= htons(preamble);
         //fPayload.name = htobe64(fPayload.name);
@@ -68,13 +68,14 @@ void Film::receiveText(string input){
 void Film::send(char * output){
     Base::send(output);
 }
-void Film::receive(char * output){
+int8_t Film::receive(char * output){
     Base::receive(output);
     //decode the payload
     uint8_t * rx = getPayload();
     decodeFilmPayload(rx[0]);
     if (getPayloadLength() == 9)
         name = *(uint64_t *)&rx[1]; //very C like
+    return 0;
 }
 void Film::displayMessage() {
     cout << "Lights:" + std::to_string(lights) + ", "
