@@ -51,7 +51,8 @@ public:
     Film();
     Film(uint16_t msg, uint8_t sender, uint8_t rcv,
     bool lights, bool camera, uint8_t action, uint64_t name);
-    void initialisePreamble();
+    int8_t initialisePreamble();
+    int8_t PreparePayload();
     bool getLights();
     void setLights(bool l);
     bool getCamera();
@@ -65,6 +66,7 @@ public:
     virtual void send(char * output);
     virtual int8_t receive(char * rx);
     void displayMessage();
-    void decodeFilmPayload(uint8_t p);
+    void decodePreamble(uint8_t p);
+    void decodePayload(uint8_t * pl);
 };
 //could make payload length const?

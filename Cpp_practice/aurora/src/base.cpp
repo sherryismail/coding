@@ -14,7 +14,7 @@ Base::Base(uint16_t msg, uint8_t sender, uint8_t rcv, uint32_t length, const uin
 : messageId(msg), senderId(sender), receiverId(rcv), payloadLength(length), payload(nullptr) 
 {
     if (pData == nullptr) //GTEST: Add a printf although this is checked later
-        cout << "Payload is nullptr";
+        cout << "Payload is nullptr"<<endl;
     setPayload(pData, length);
 }
 Base::~Base() {
